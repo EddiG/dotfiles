@@ -124,7 +124,8 @@ alias mc='mc -b'
 # Add git info in bash prompt
 source ~/.git-prompt.sh
 # PS1='\u@\h \W$(__git_ps1 " (%s)")\$ '
-PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " (%s)")\$ '
+# PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " (%s)")\n\$ '
+PS1='${debian_chroot:+($debian_chroot)}\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " (%s)")\n\$ '
 
 # Disable C-j combination for prevent execution a current command imediately
 bind '"\C-j":""'

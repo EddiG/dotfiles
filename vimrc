@@ -26,7 +26,7 @@ Plug 'neomake/neomake'
 " Language specified
 " JS
 Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
+Plug 'maxmellon/vim-jsx-pretty'
 " CSS in JS
 " Plug 'fleischie/vim-styled-components'
 " CSS
@@ -92,7 +92,7 @@ set nrformats=
 :tnoremap <Esc> <C-\><C-n>
 
 " Automatically removing all trailing whitespace
-autocmd BufWritePre * :%s/\s\+$//e
+"autocmd BufWritePre * :%s/\s\+$//e
 
 " ================ Persistent Undo ==================
 " Keep undo history across sessions, by storing in file.
@@ -162,15 +162,12 @@ autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
-" Prettier for JS formatting (gq command)
+" Prettier JS
 " Previously you should install prettier (npm install -g prettier)
 " airbnb
 autocmd FileType javascript set formatprg=prettier\ --single-quote\ --trailing-comma\ all\ --stdin
 " standardjs
 " autocmd FileType javascript set formatprg=prettier-standard
-
-" Prettier autoformat on save
-" autocmd BufWritePre *.js :normal gggqG
 
 " Neoformat
 let g:neoformat_try_formatprg = 1

@@ -120,8 +120,8 @@ endif
 
 " Neomake
 let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
-let g:neomake_javascript_eslint_exe = nrun#Which('eslint')
-let g:neomake_javascript_flow_exe = nrun#Which('flow')
+autocmd BufRead *.js :let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
+autocmd BufRead *.js :let b:neomake_javascript_flow_exe = nrun#Which('flow')
 
 autocmd! BufWritePost * Neomake
 
@@ -161,6 +161,9 @@ autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Define some files that have json format
+autocmd BufRead,BufNewFile .babelrc,.eslintrc set filetype=json
 
 " Prettier JS
 " Previously you should install prettier (npm install -g prettier)

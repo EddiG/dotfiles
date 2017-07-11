@@ -89,7 +89,10 @@ set shiftwidth=2
 set nrformats=
 
 " Map <Esc> to exit terminal-mode:
-:tnoremap <Esc> <C-\><C-n>
+tnoremap <Esc> <C-\><C-n>
+
+" Paste with placing the replaced content in 'the black hole register'
+vnoremap p "_dP
 
 " Automatically removing all trailing whitespace
 "autocmd BufWritePre * :%s/\s\+$//e
@@ -122,7 +125,6 @@ endif
 let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
 autocmd BufRead *.js :let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
 autocmd BufRead *.js :let b:neomake_javascript_flow_exe = nrun#Which('flow')
-
 autocmd! BufWritePost * Neomake
 
 " For pangloss/vim-javascript plugin (enable Flow syntax)
@@ -166,15 +168,14 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd BufRead,BufNewFile .babelrc,.eslintrc set filetype=json
 
 " Prettier JS
-" Previously you should install prettier (npm install -g prettier)
-" airbnb
 autocmd FileType javascript set formatprg=prettier\ --single-quote\ --trailing-comma\ all\ --stdin
-" standardjs
-" autocmd FileType javascript set formatprg=prettier-standard
+
+" Prettier JSON
+autocmd FileType json set formatprg=prettier\ --parser\ json\ --stdin
 
 " Neoformat
 let g:neoformat_try_formatprg = 1
-autocmd BufWritePre *.js Neoformat
+autocmd BufWritePre *.js,*.json,.babelrc,.eslintrc Neoformat
 
 " Trigger configuration (Optional)
 let g:UltiSnipsExpandTrigger="<C-l>"

@@ -117,13 +117,15 @@ if ! shopt -oq posix; then
 fi
 
 # My alias
-alias passwords='sudo gpg --decrypt /root/passwords.gpg | less'
 alias du='du -Phc -d 1 | sort -h'
 alias df='df -Th'
 alias mc='mc -b'
 alias mkdir='mkdir -pv'
 alias free='free -mt'
 alias myip="curl http://ip-api.com/line; echo"
+alias passwords='gpg --decrypt ~/passwords.gpg | less'
+alias passwords_decrypt='gpg --output /tmp/passwords -d ~/passwords.gpg && vim /tmp/passwords'
+alias passwords_encrypt='gpg --output ~/passwords.gpg --cipher-algo AES256 --symmetric /tmp/passwords && shred /tmp/passwords'
 
 # Add git info in bash prompt
 source ~/.git-prompt.sh

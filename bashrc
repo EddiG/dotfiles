@@ -118,8 +118,12 @@ fi
 
 # My alias
 alias passwords='sudo gpg --decrypt /root/passwords.gpg | less'
-alias dusort='du -Phc -d 1 | sort -h'
+alias du='du -Phc -d 1 | sort -h'
+alias df='df -Th'
 alias mc='mc -b'
+alias mkdir='mkdir -pv'
+alias free='free -mt'
+alias myip="curl http://ip-api.com/line; echo"
 
 # Add git info in bash prompt
 source ~/.git-prompt.sh
@@ -129,3 +133,8 @@ PS1='${debian_chroot:+($debian_chroot)}\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 
 
 # Disable C-j combination for prevent execution a current command imediately
 bind '"\C-j":""'
+
+# Get linux command cheatsheet from http://cheat.sh/
+cheatsh() {
+  curl cheat.sh/$1
+}

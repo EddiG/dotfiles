@@ -173,6 +173,10 @@ autocmd FileType javascript set formatprg=prettier\ --single-quote\ --trailing-c
 " Prettier JSON
 autocmd FileType json set formatprg=prettier\ --parser\ json\ --stdin
 
+" Format HTML
+" Previously need to install js-beautify package from npm
+autocmd FileType html set formatprg=html-beautify
+
 " Neoformat
 let g:neoformat_try_formatprg = 1
 autocmd BufWritePre *.js,*.json,.babelrc,.eslintrc Neoformat

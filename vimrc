@@ -83,10 +83,15 @@ set autoindent
 set expandtab
 set softtabstop=2
 set shiftwidth=2
+set tabstop=2
 
 " This will cause Vim to treat all numerals as decimal,
 " regardless of whether they are padded with zeros.
 set nrformats=
+
+" Allow per-project configuration
+set exrc
+set secure
 
 " Map <Esc> to exit terminal-mode:
 tnoremap <Esc> <C-\><C-n>
@@ -105,25 +110,9 @@ if has('persistent_undo')
   set undofile
 endif
 
-" Syntastic configuration
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-
-" let g:syntastic_debug = 3
-" let g:syntastic_always_populate_loc_list = 0
-" let g:syntastic_auto_loc_list = 0
-" let g:syntastic_check_on_open = 0
-" let g:syntastic_aggregate_errors = 1
-" let g:syntastic_check_on_wq = 0
-
-" " let g:syntastic_javascript_checkers = ['eslint', 'flow']
-" let g:syntastic_javascript_checkers = ['eslint']
-" let g:syntastic_javascript_eslint_exe = 'npm run --silent eslint -- -f compact'
-
 " Neomake
 let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
-autocmd BufRead *.js :let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
+autocmd BufRead *.js,*.jsx :let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
 autocmd BufRead *.js :let b:neomake_javascript_flow_exe = nrun#Which('flow')
 autocmd! BufWritePost * Neomake
 
@@ -165,7 +154,7 @@ autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 " Define some files that have json format
-autocmd BufRead,BufNewFile .babelrc,.eslintrc set filetype=json
+autocmd BufRead,BufNewFile .babelrc,.eslintrc,.prettierrc set filetype=json
 
 " Prettier JS
 autocmd FileType javascript set formatprg=prettier\ --single-quote\ --trailing-comma\ all\ --stdin
@@ -174,29 +163,11 @@ autocmd FileType javascript set formatprg=prettier\ --single-quote\ --trailing-c
 autocmd FileType json set formatprg=prettier\ --parser\ json\ --stdin
 
 " Format HTML
-" Previously need to install js-beautify package from npm
 autocmd FileType html set formatprg=html-beautify
 
 " Neoformat
 let g:neoformat_try_formatprg = 1
-autocmd BufWritePre *.js,*.json,.babelrc,.eslintrc Neoformat
+autocmd BufWritePre *.js,*.jsx,*.json,.babelrc,.eslintrc,.prettierrc Neoformat
 
 " Trigger configuration (Optional)
 let g:UltiSnipsExpandTrigger="<C-l>"
-
-" Define how to enter in the PASTE mode
-" imap <silent> <F4> <ESC>:set invpaste<CR>
-
-" " Define how to clear serch higlight
-" nnoremap <esc> :noh<return><esc>
-
-" " Define how to insert empty lines from the normal mode
-" " nnoremap <silent><A-j> :set paste<CR>m`o<Esc>``:set nopaste<CR>
-" " nnoremap <silent><A-k> :set paste<CR>m`O<Esc>``:set nopaste<CR>
-
-" " ======== Commands ========
-" " gc        -     Toggle comment block
-" " gcc       -     Toggle comment line
-" " leader+b  -     Show buffers list
-" " <C>+p     -     Fuzzy search files
-" " <C>+\     -     Open file location in NERDTree

@@ -4,9 +4,15 @@
 [push]
 	default = simple
 [core]
-	editor = vim
+	editor = nvim
 [alias]
         l = log --graph --oneline --decorate
         ll = log --graph --oneline --decorate --branches --tags
         lll = log --graph --oneline --decorate --all
         llll = log --date=short --pretty=format:\"%C(yellow)%h %C(cyan)%cd %C(cyan)(%cr)%Creset %s\"
+[credential]
+	helper = osxkeychain
+[merge]
+	conflictstyle = diff3
+[rerere]
+	enabled = 1

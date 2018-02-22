@@ -28,10 +28,12 @@ Plug 'neomake/neomake'
 Plug 'pangloss/vim-javascript'
 Plug 'maxmellon/vim-jsx-pretty'
 " CSS in JS
-" Plug 'fleischie/vim-styled-components'
+" Plug 'styled-components/vim-styled-components'
 " CSS
 Plug 'hail2u/vim-css3-syntax'
 Plug 'ap/vim-css-color'
+" GraphQL
+Plug 'jparise/vim-graphql'
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -111,10 +113,11 @@ if has('persistent_undo')
 endif
 
 " Neomake
-let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
-autocmd BufRead *.js,*.jsx :let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
-autocmd BufRead *.js :let b:neomake_javascript_flow_exe = nrun#Which('flow')
 autocmd! BufWritePost * Neomake
+" Use those config options per project
+" let g:neomake_javascript_enabled_makers = ['eslint']
+" autocmd BufRead *.js :let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
+" autocmd BufRead *.js :let b:neomake_javascript_flow_exe = nrun#Which('flow')
 
 " For pangloss/vim-javascript plugin (enable Flow syntax)
 let g:javascript_plugin_flow = 1
@@ -153,8 +156,14 @@ autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
-" Define some files that have json format
+" Define files that have json format
 autocmd BufRead,BufNewFile .babelrc,.eslintrc,.prettierrc set filetype=json
+
+" Define files that have javascript format
+autocmd BufRead,BufNewFile *.ts set filetype=javascript
+
+" Define files that have yaml format
+autocmd BufRead,BufNewFile .graphcoolrc set filetype=yaml
 
 " Prettier JS
 autocmd FileType javascript set formatprg=prettier\ --single-quote\ --trailing-comma\ all\ --stdin
@@ -162,12 +171,15 @@ autocmd FileType javascript set formatprg=prettier\ --single-quote\ --trailing-c
 " Prettier JSON
 autocmd FileType json set formatprg=prettier\ --parser\ json\ --stdin
 
+" Prettier CSS
+autocmd FileType css set formatprg=prettier\ --parser\ css\ --stdin
+
 " Format HTML
 autocmd FileType html set formatprg=html-beautify
 
 " Neoformat
 let g:neoformat_try_formatprg = 1
-autocmd BufWritePre *.js,*.jsx,*.json,.babelrc,.eslintrc,.prettierrc Neoformat
+autocmd BufWritePre *.js,*.jsx,*.json,*.css,.babelrc,.eslintrc,.prettierrc Neoformat
 
 " Trigger configuration (Optional)
 let g:UltiSnipsExpandTrigger="<C-l>"

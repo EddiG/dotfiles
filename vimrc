@@ -145,10 +145,16 @@ let g:bufExplorerShowRelativePath=1
 nnoremap <leader>b :BufExplorer<CR>
 
 " Map ctrl-movement keys to window switching
-map <C-k> <C-w><Up>
-map <C-j> <C-w><Down>
-map <C-l> <C-w><Right>
-map <C-h> <C-w><Left>
+nmap <silent> <C-k> <C-w><Up>
+nmap <silent> <C-j> <C-w><Down>
+nmap <silent> <C-l> <C-w><Right>
+nmap <silent> <C-h> <C-w><Left>
+
+" Map keys for window resizing
+nmap <silent> <C-o> <C-w><
+nmap <silent> - <C-w>-
+nmap <silent> = <C-w>+
+nmap <silent> <C-p> <C-w>>
 
 " Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -179,7 +185,7 @@ autocmd FileType html set formatprg=html-beautify
 
 " Neoformat
 let g:neoformat_try_formatprg = 1
-autocmd BufWritePre *.js,*.jsx,*.json,*.css,.babelrc,.eslintrc,.prettierrc Neoformat
+autocmd BufWritePre *.js,*.jsx,*.json,*.css,*.graphql,.babelrc,.eslintrc,.prettierrc Neoformat
 
 " Trigger configuration (Optional)
 let g:UltiSnipsExpandTrigger="<C-l>"

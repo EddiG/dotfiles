@@ -151,10 +151,10 @@ nmap <silent> <C-l> <C-w><Right>
 nmap <silent> <C-h> <C-w><Left>
 
 " Map keys for window resizing
-nmap <silent> <C-o> <C-w><
+nmap <silent> <C-n> <C-w><
 nmap <silent> - <C-w>-
 nmap <silent> = <C-w>+
-nmap <silent> <C-p> <C-w>>
+nmap <silent> <C-m> <C-w>>
 
 " Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS

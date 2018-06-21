@@ -21,29 +21,25 @@ Plug 'ervandew/supertab'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Checker
-Plug 'neomake/neomake'
+Plug 'w0rp/ale'
 
-" Language specified
 " JS
 Plug 'pangloss/vim-javascript'
 Plug 'maxmellon/vim-jsx-pretty'
+
 " CSS in JS
-" Plug 'styled-components/vim-styled-components'
+" Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+"
 " CSS
-Plug 'hail2u/vim-css3-syntax'
+" Plug 'hail2u/vim-css3-syntax'
 Plug 'ap/vim-css-color'
+
 " GraphQL
 Plug 'jparise/vim-graphql'
 
 " Snippets
 Plug 'SirVer/ultisnips'
 Plug 'https://github.com/EddiG/vim-snippets.git'
-
-" Brings the ablility to find the utility in current node project
-Plug 'jaawerth/nrun.vim'
-
-" Formatter
-Plug 'sbdchd/neoformat'
 
 call plug#end()
 
@@ -101,9 +97,6 @@ tnoremap <Esc> <C-\><C-n>
 " Paste with placing the replaced content in 'the black hole register'
 vnoremap p "_dP
 
-" Automatically removing all trailing whitespace
-"autocmd BufWritePre * :%s/\s\+$//e
-
 " ================ Persistent Undo ==================
 " Keep undo history across sessions, by storing in file.
 if has('persistent_undo')
@@ -112,18 +105,27 @@ if has('persistent_undo')
   set undofile
 endif
 
-" Neomake
-autocmd! BufWritePost * Neomake
-" Use those config options per project
-" let g:neomake_javascript_enabled_makers = ['eslint']
-" autocmd BufRead *.js :let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
-" autocmd BufRead *.js :let b:neomake_javascript_flow_exe = nrun#Which('flow')
+" ================ Linting & Formatting ==================
+" ALE (Asynchronus Lint Engine)
+" Use these configuration options per project
+"
+" let g:ale_linters = {}
+" let g:ale_linters['javascript'] = ['eslint']
+" let g:ale_javascript_eslint_use_global = 0
+" let g:ale_javascript_eslint_suppress_missing_config = 1
+" let g:ale_javascript_eslint_suppress_eslintignore = 1
+
+let g:ale_fixers = {}
+let g:ale_fixers['javascript'] = ['prettier']
+let g:ale_fixers['json'] = ['prettier']
+let g:ale_fixers['css'] = ['prettier']
+" let g:ale_javascript_prettier_use_local_config = 1
+" let g:ale_fix_on_save = 1
+" ========================================================
+
 
 " For pangloss/vim-javascript plugin (enable Flow syntax)
 let g:javascript_plugin_flow = 1
-
-" For mxw/vim-jsx plugin (disable the jsx extension requiring)
-let g:jsx_ext_required = 0
 
 " Deoplete (autocomplete)
 let g:deoplete#enable_at_startup = 1
@@ -170,22 +172,6 @@ autocmd BufRead,BufNewFile *.ts set filetype=javascript
 
 " Define files that have yaml format
 autocmd BufRead,BufNewFile .graphcoolrc set filetype=yaml
-
-" Prettier JS
-autocmd FileType javascript set formatprg=prettier\ --single-quote\ --trailing-comma\ all\ --stdin
-
-" Prettier JSON
-autocmd FileType json set formatprg=prettier\ --parser\ json\ --stdin
-
-" Prettier CSS
-autocmd FileType css set formatprg=prettier\ --parser\ css\ --stdin
-
-" Format HTML
-autocmd FileType html set formatprg=html-beautify
-
-" Neoformat
-let g:neoformat_try_formatprg = 1
-autocmd BufWritePre *.js,*.jsx,*.json,*.css,*.graphql,.babelrc,.eslintrc,.prettierrc Neoformat
 
 " Trigger configuration (Optional)
 let g:UltiSnipsExpandTrigger="<C-l>"

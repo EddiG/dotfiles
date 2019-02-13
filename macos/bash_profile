@@ -1,6 +1,3 @@
-# Autocompletion
-[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
-
 # Aliases
 alias grep='grep --color=auto'
 alias ll='gls -lah --color=auto --group-directories-first'
@@ -17,20 +14,31 @@ alias vim='nvim'
 alias docker_rmi_dangling='docker rmi $(docker images -q -f dangling=true)'
 alias screenfetch='screenfetch 2>/dev/null'
 
+# Get linux command cheatsheet from http://cheat.sh/
+cheatsh() {
+  args="${*:?How to use: cheatsh bash copy with progress bar}"
+  query=${args// /+}
+  query=${query/+//}
+  curl cheat.sh/$query
+}
+
 # Prompt
-source ~/.bash_prompt
+[ -f ~/.bash_prompt ] && . ~/.bash_prompt
+
+# Autocompletion
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
 # The next line updates PATH for the Google Cloud SDK.
-[ -f '/Users/eddig/.local/share/google-cloud-sdk/path.bash.inc' ] && . '/Users/eddig/.local/share/google-cloud-sdk/path.bash.inc'
+[ -f ~/.local/share/google-cloud-sdk/path.bash.inc ] && . ~/.local/share/google-cloud-sdk/path.bash.inc
 
 # The next line enables shell command completion for gcloud.
-[ -f '/Users/eddig/.local/share/google-cloud-sdk/completion.bash.inc' ] && . '/Users/eddig/.local/share/google-cloud-sdk/completion.bash.inc'
+[ -f ~/.local/share/google-cloud-sdk/completion.bash.inc ] && . ~/.local/share/google-cloud-sdk/completion.bash.inc
 
 # The next line update PATH for the Istio
-[ -d '/Users/eddig/.local/share/istio/bin' ] && export PATH="/Users/eddig/.local/share/istio/bin:$PATH"
+[ -d ~/.local/share/istio/bin ] && export PATH="~/.local/share/istio/bin:$PATH"
 
 # Configure nvm (Node.js version manager)
 export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
+[ -f "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -f "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
 

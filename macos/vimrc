@@ -46,6 +46,10 @@ Plug 'jparise/vim-graphql'
 Plug 'SirVer/ultisnips'
 Plug 'https://github.com/EddiG/vim-snippets.git'
 
+" Cheat sheets
+" Accessable via <leader>KB or <leader>KK
+Plug 'dbeniamine/cheat.sh-vim'
+
 call plug#end()
 
 syntax on

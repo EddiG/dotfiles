@@ -8,8 +8,10 @@ Plug 'morhetz/gruvbox'
 " Explore
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'vim-airline/vim-airline'
+" Plug 'Shougo/denite.nvim'
 
 " Editor
 Plug 'jiangmiao/auto-pairs'
@@ -26,6 +28,9 @@ Plug 'w0rp/ale'
 " JS
 Plug 'pangloss/vim-javascript'
 Plug 'maxmellon/vim-jsx-pretty'
+
+" TypeScript
+Plug 'HerringtonDarkholme/yats.vim'
 
 " CSS in JS
 " Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
@@ -46,13 +51,19 @@ call plug#end()
 syntax on
 
 " Set the leader key
-let mapleader=","
+let mapleader = ","
 noremap \ ,
 
 " Theme
-let g:gruvbox_italic=1
+let g:gruvbox_italic = 1
 set background=dark
 colorscheme gruvbox
+
+" Allow switching from not saved buffer
+set hidden
+
+" Ask confirmation if there is not saved buffer and I'm trying to quit from vim
+set confirm
 
 " Don't redraw while executing macros (good performance config)
 set lazyredraw
@@ -121,14 +132,22 @@ let g:ale_fixers['json'] = ['prettier']
 let g:ale_fixers['css'] = ['prettier']
 " let g:ale_javascript_prettier_use_local_config = 1
 " let g:ale_fix_on_save = 1
+
+" Completion
+" let g:ale_completion_enabled = 1
+" autocmd FileType typescript call deoplete#disable()
+" autocmd FileType typescript setlocal omnifunc=ale#completion#OmniFunc
+
+nnoremap <silent> <Leader>d :ALEGoToDefinition<CR>
+nnoremap <silent> <Leader>r :ALEFindReferences<CR>
 " ========================================================
 
-
 " For pangloss/vim-javascript plugin (enable Flow syntax)
-let g:javascript_plugin_flow = 1
+" let g:javascript_plugin_flow = 1
 
 " Deoplete (autocomplete)
-let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_at_startup=1
+let g:deoplete#enable_ignore_case=1
 
 " NERDTree
 nmap <C-\> :NERDTreeFind<CR>
@@ -138,13 +157,37 @@ nmap <silent> <leader><leader> :NERDTreeToggle<CR>
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
 " Airline
-let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#buffer_nr_show = 1
 set laststatus=2
 
 " Bufexplorer
-let g:bufExplorerDisableDefaultKeyMapping=1
-let g:bufExplorerShowRelativePath=1
+let g:bufExplorerDisableDefaultKeyMapping = 1
+let g:bufExplorerDetailedHelp = 1
+let g:bufExplorerShowRelativePath = 1
+let g:bufExplorerShowTabBuffer = 1
+let g:bufExplorerSortBy = 'fullpath'
+let g:bufExplorerSplitBelow = 1
+let g:bufExplorerSplitRight = 1
+let g:bufExplorerSplitOutPathName = 0
 nnoremap <leader>b :BufExplorer<CR>
+nnoremap <Leader>l :ls<CR>
+nnoremap <Leader>g :e#<CR>
+nnoremap <Leader>1 :1b<CR>
+nnoremap <Leader>2 :2b<CR>
+nnoremap <Leader>3 :3b<CR>
+nnoremap <Leader>4 :4b<CR>
+nnoremap <Leader>5 :5b<CR>
+nnoremap <Leader>6 :6b<CR>
+nnoremap <Leader>7 :7b<CR>
+nnoremap <Leader>8 :8b<CR>
+nnoremap <Leader>9 :9b<CR>
+nnoremap <Leader>0 :10b<CR>
+
+" Supertab
+let g:SuperTabMappingForward='<s-tab>'
+let g:SuperTabMappingBackward='<tab>'
 
 " Map ctrl-movement keys to window switching
 nmap <silent> <C-k> <C-w><Up>
@@ -166,9 +209,6 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 " Define files that have json format
 autocmd BufRead,BufNewFile .babelrc,.eslintrc,.prettierrc set filetype=json
-
-" Define files that have javascript format
-autocmd BufRead,BufNewFile *.ts set filetype=javascript
 
 " Define files that have yaml format
 autocmd BufRead,BufNewFile .graphcoolrc set filetype=yaml

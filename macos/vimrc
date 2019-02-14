@@ -214,8 +214,5 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 " Define files that have json format
 autocmd BufRead,BufNewFile .babelrc,.eslintrc,.prettierrc set filetype=json
 
-" Define files that have yaml format
-autocmd BufRead,BufNewFile .graphcoolrc set filetype=yaml
-
 " Trigger configuration (Optional)
 let g:UltiSnipsExpandTrigger="<C-l>"

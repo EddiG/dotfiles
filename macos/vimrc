@@ -109,6 +109,9 @@ set secure
 " Map <Esc> to exit terminal-mode:
 tnoremap <Esc> <C-\><C-n>
 
+" Apply bash_profile on login in terminal
+let &shell='/bin/bash --rcfile ~/.bash_profile'
+
 " Paste with placing the replaced content in 'the black hole register'
 vnoremap p "_dP
 

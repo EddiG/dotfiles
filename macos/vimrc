@@ -30,7 +30,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'maxmellon/vim-jsx-pretty'
 
 " TypeScript
-Plug 'HerringtonDarkholme/yats.vim'
+Plug 'leafgarland/typescript-vim'
 
 " CSS in JS
 " Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
@@ -146,6 +146,9 @@ let g:ale_linters = {}
 let g:ale_linters['python'] = ['flake8']
 let g:ale_fixers['python'] = ['black']
 
+" install xmllint first
+let g:ale_fixers['xml'] = ['xmllint']
+
 " let g:ale_javascript_prettier_use_local_config = 1
 " let g:ale_fix_on_save = 1
 
@@ -161,9 +164,13 @@ nnoremap <silent> <Leader>r :ALEFindReferences<CR>
 " For pangloss/vim-javascript plugin (enable Flow syntax)
 " let g:javascript_plugin_flow = 1
 
+" typescript-vim
+" use prettier instead
+let g:typescript_indent_disable = 1
+
 " Deoplete (autocomplete)
-let g:deoplete#enable_at_startup=1
-let g:deoplete#enable_ignore_case=1
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_ignore_case = 1
 
 " NERDTree
 nmap <C-\> :NERDTreeFind<CR>
@@ -223,8 +230,10 @@ autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
-" Define files that have json format
+" Non standard files 
 autocmd BufRead,BufNewFile .babelrc,.eslintrc,.prettierrc set filetype=json
+autocmd BufRead,BufNewFile *.prisma set filetype=graphql
+autocmd BufRead,BufNewFile *.toml set filetype=yaml
 
 " Trigger configuration (Optional)
 let g:UltiSnipsExpandTrigger="<C-l>"

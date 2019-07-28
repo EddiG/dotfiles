@@ -53,6 +53,10 @@ Plug 'https://github.com/EddiG/vim-snippets.git'
 " Accessable via <leader>KB or <leader>KK
 Plug 'dbeniamine/cheat.sh-vim'
 
+" Dev Icons
+Plug 'ryanoasis/vim-devicons'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
 call plug#end()
 
 syntax on
@@ -166,7 +170,7 @@ nnoremap <silent> <Leader>r :ALEFindReferences<CR>
 
 " typescript-vim
 " use prettier instead
-let g:typescript_indent_disable = 1
+let g:typescript_indent_disable = 0
 
 " Deoplete (autocomplete)
 let g:deoplete#enable_at_startup = 1
@@ -175,6 +179,8 @@ let g:deoplete#enable_ignore_case = 1
 " NERDTree
 nmap <C-\> :NERDTreeFind<CR>
 nmap <silent> <leader><leader> :NERDTreeToggle<CR>
+let g:NERDTreeDirArrowExpandable = "\u00a0"
+let g:NERDTreeDirArrowCollapsible = "\u00a0"
 
 " Ctrlp
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
@@ -211,6 +217,9 @@ nnoremap <Leader>0 :10b<CR>
 " Supertab
 let g:SuperTabMappingForward='<s-tab>'
 let g:SuperTabMappingBackward='<tab>'
+
+" Dev Icons
+let g:DevIconsEnableFoldersOpenClose = 1
 
 " Map ctrl-movement keys to window switching
 nmap <silent> <C-k> <C-w><Up>

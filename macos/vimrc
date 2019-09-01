@@ -242,7 +242,7 @@ autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 " Non standard files 
-autocmd BufRead,BufNewFile .babelrc,.eslintrc,.prettierrc set filetype=json
+autocmd BufRead,BufNewFile .babelrc,.eslintrc,.prettierrc,*.geojson set filetype=json
 autocmd BufRead,BufNewFile *.prisma set filetype=graphql
 autocmd BufRead,BufNewFile *.toml set filetype=yaml
 

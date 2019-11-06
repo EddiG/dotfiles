@@ -11,36 +11,22 @@ Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'vim-airline/vim-airline'
-" Plug 'Shougo/denite.nvim'
 
 " Editor
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-fugitive'
+" It's a nice tool...but I don't use it much
+" Plug 'tpope/vim-fugitive'
 Plug 'ervandew/supertab'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Checker
 Plug 'w0rp/ale'
 
-" JS
-Plug 'pangloss/vim-javascript'
-Plug 'maxmellon/vim-jsx-pretty'
-
-" TypeScript
-Plug 'leafgarland/typescript-vim'
-
-" CSS in JS
-" Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-"
-" CSS
-" Plug 'hail2u/vim-css3-syntax'
-Plug 'ap/vim-css-color'
-
-" GraphQL
-Plug 'jparise/vim-graphql'
+" Syntax highlight for almost all languages
+Plug 'sheerun/vim-polyglot'
 
 " Python
 Plug 'zchee/deoplete-jedi'
@@ -164,14 +150,6 @@ let g:ale_fixers['xml'] = ['xmllint']
 nnoremap <silent> <Leader>d :ALEGoToDefinition<CR>
 nnoremap <silent> <Leader>r :ALEFindReferences<CR>
 " ========================================================
-
-" vim-javascript 
-" enable Flow syntax
-" let g:javascript_plugin_flow = 1
-
-" typescript-vim
-" use prettier instead
-let g:typescript_indent_disable = 0
 
 " Deoplete (autocomplete)
 let g:deoplete#enable_at_startup = 1

@@ -6,7 +6,8 @@ call plug#begin('~/.vim/plugged')
 Plug 'morhetz/gruvbox'
 
 " Explore
-Plug 'ctrlpvim/ctrlp.vim'
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jlanzarotta/bufexplorer'
@@ -198,8 +199,10 @@ nmap <silent> <leader><leader> :NERDTreeToggle<CR>
 let g:NERDTreeDirArrowExpandable = "\u00a0"
 let g:NERDTreeDirArrowCollapsible = "\u00a0"
 
-" Ctrlp
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+" Fuzzy searcher (fzf)
+" brew install fzf ripgrep
+nmap <C-p> :Files<CR>
+nmap <C-f> :Rg<CR>
 
 " Airline
 let g:airline#extensions#tabline#enabled = 1

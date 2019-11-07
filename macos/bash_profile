@@ -47,3 +47,7 @@ cheatsh() {
 export NVM_DIR="$HOME/.nvm"
 [ -f "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 [ -f "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"  # This loads nvm bash_completion
+
+# Fuzzy searcher files (fzf + ripgrep)
+# brew install fzf ripgrep
+export FZF_DEFAULT_COMMAND='rg --files --follow --hidden'

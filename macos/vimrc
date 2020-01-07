@@ -241,6 +241,9 @@ let g:SuperTabMappingBackward='<tab>'
 " Dev Icons
 let g:DevIconsEnableFoldersOpenClose = 1
 
+" Fold/Unfold trigger
+nmap <silent> <leader>f za
+
 " Map ctrl-movement keys to window switching
 nmap <silent> <C-k> <C-w><Up>
 nmap <silent> <C-j> <C-w><Down>
@@ -258,6 +261,9 @@ nmap <silent> <C-m> <C-w>>
 " autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 " autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 " autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable fold for JSON
+" autocmd FileType json set foldmethod=syntax 
 
 " Non standard files 
 autocmd BufRead,BufNewFile .babelrc,.eslintrc,.prettierrc,*.geojson set filetype=json

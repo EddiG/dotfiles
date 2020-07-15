@@ -10,8 +10,3 @@ Fonts with the additional emoji glyphs. Taken from the [repo](https://github.com
 ```bash
 cp fonts/* ~/Library/Fonts/
 ```
-
-## Apply fixes
-```bash
-./add_fixes.sh
-```

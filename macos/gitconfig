@@ -1,8 +1,7 @@
 [user]
 	name = Eduard Gilmutdinov
 	email = edgilmutdinov@gmail.com
-[push]
-	default = simple
+	username = eddig
 [core]
 	editor = nvim
 [alias]
@@ -12,9 +11,13 @@
         llll = log --date=short --pretty=format:\"%C(yellow)%h %C(cyan)%cd %C(cyan)(%cr)%Creset %s\"
 [credential]
 	helper = osxkeychain
-[merge]
-	conflictstyle = diff3
 [rerere]
 	enabled = 1
+[merge]
+	conflictstyle = diff3
+[push]
+	default = simple
 [pull]
 	rebase = true
+[diff]
+	tool = nvimdiff3

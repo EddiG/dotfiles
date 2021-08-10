@@ -82,9 +82,9 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+ 
+# Set default editor
+export EDITOR='nvim'
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -116,7 +116,6 @@ alias ll='gls -lah --color=auto --group-directories-first'
 alias du='gdu -Phc -d 1'
 alias dusort='gdu -Phc -d 1 | sort -h'
 alias df='gdf -Th'
-alias mc='mc -b'
 alias mkdir='mkdir -pv'
 alias myip="curl http://ip-api.com/line; echo"
 alias passwords='gpg --decrypt ~/passwords.gpg | less'
@@ -124,7 +123,8 @@ alias passwords_decrypt='gpg --output /tmp/passwords -d ~/passwords.gpg && vim /
 alias passwords_encrypt='gpg --output ~/passwords.gpg --cipher-algo AES256 --symmetric /tmp/passwords && rm -P /tmp/passwords'
 alias vim='nvim'
 alias docker_rmi_dangling='docker rmi $(docker images -q -f dangling=true)'
-alias screenfetch='screenfetch 2>/dev/null'
+alias screenfetch='neofetch'
+alias cpsafe='rsync -av --progress --exclude node_modules --exclude .git'
 
 # Get linux command cheatsheet from http://cheat.sh/
 cheatsh() {
@@ -147,3 +147,39 @@ export FZF_DEFAULT_COMMAND='rg --files --follow --hidden'
 # Configure nvm (Node.js version manager)
 export NVM_DIR="$HOME/.nvm"
 [ -f "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+
+# Configure autojump
+# brew install autojump
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+
+# Configure nnn
+export NNN_OPTS="do" 
+export NNN_PLUG="c:fzcd;p:preview-tui-ext-modified"
+export NNN_FIFO="/tmp/nnn.fifo"
+n ()
+{
+    # Block nesting of nnn in subshells
+    if [ -n $NNNLVL ] && [ "${NNNLVL:-0}" -ge 1 ]; then
+        echo "nnn is already running"
+        return
+    fi
+
+    # The default behaviour is to cd on quit (nnn checks if NNN_TMPFILE is set)
+    # To cd on quit only on ^G, remove the "export" as in:
+    #     NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
+    # NOTE: NNN_TMPFILE is fixed, should not be modified
+    export NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
+
+    # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
+    # stty start undef
+    # stty stop undef
+    # stty lwrap undef
+    # stty lnext undef
+
+    nnn "$@"
+
+    if [ -f "$NNN_TMPFILE" ]; then
+            . "$NNN_TMPFILE"
+            rm -f "$NNN_TMPFILE" > /dev/null
+    fi
+}

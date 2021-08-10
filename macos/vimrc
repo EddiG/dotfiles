@@ -11,6 +11,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jlanzarotta/bufexplorer'
+Plug 'mcchrish/nnn.vim'
 Plug 'vim-airline/vim-airline'
 
 " Editor
@@ -36,6 +37,9 @@ Plug 'w0rp/ale'
 " Snippets
 Plug 'SirVer/ultisnips'
 Plug 'https://github.com/EddiG/vim-snippets.git'
+
+" Disable features those slow down the loading of a huge file
+Plug 'mhinz/vim-hugefile'
 
 " Cheat sheets
 " Accessable via <leader>KB or <leader>KK
@@ -107,11 +111,11 @@ set secure
 " Map <Esc> to exit terminal-mode:
 tnoremap <Esc> <C-\><C-n>
 
-" Apply bash_profile on login in terminal
-let &shell='/bin/bash --rcfile ~/.bash_profile'
-
 " Paste with placing the replaced content in 'the black hole register'
 vnoremap p "_dP
+
+" Insert real tab
+inoremap <S-Tab> <C-V><Tab>
 
 " ================ Persistent Undo ==================
 " Keep undo history across sessions, by storing in file.
@@ -185,6 +189,7 @@ let g:ale_fixers['javascriptreact'] = ['prettier']
 let g:ale_fixers['graphql'] = ['prettier']
 let g:ale_fixers['json'] = ['prettier']
 let g:ale_fixers['css'] = ['prettier']
+let g:ale_fixers['html'] = ['prettier']
 
 " pip3 install black flake8
 let g:ale_linters = {}
@@ -193,6 +198,10 @@ let g:ale_fixers['python'] = ['black']
 
 " install xmllint first
 let g:ale_fixers['xml'] = ['xmllint']
+
+" install shfmt first
+let g:ale_fixers['sh'] = ['shfmt']
+autocmd FileType sh let g:ale_fix_on_save = 1
 
 " nnoremap <silent> <Leader>d :ALEGoToDefinition<CR>
 " nnoremap <silent> <Leader>r :ALEFindReferences<CR>
@@ -207,6 +216,24 @@ nmap <C-\> :NERDTreeFind<CR>
 nmap <silent> <leader><leader> :NERDTreeToggle<CR>
 let g:NERDTreeDirArrowExpandable = "\u00a0"
 let g:NERDTreeDirArrowCollapsible = "\u00a0"
+
+" NNN
+" Disable default mappings
+let g:nnn#command = 'nnn -do'
+" To open nnn when vim load a directory
+let g:nnn#replace_netrw = 1
+" To overrite default mappings
+let g:nnn#set_default_mappings = 0
+" Start nnn in the current file's directory
+nnoremap <silent> <leader>n :NnnPicker %:p:h<CR>
+" Layout setup
+" Opens the n³ window in a split
+" let g:nnn#layout = 'new' " or vnew, tabnew etc.
+" Or pass a dictionary with window size
+" let g:nnn#layout = { 'left': '~20%' } " or right, up, down
+" Floating window (neovim latest and vim with patch 8.2.191)
+let g:nnn#layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Debug' } }
+let g:nnn#action = { '<c-o>': 'edit', '<c-s>': 'vsplit' }
 
 " Fuzzy searcher (fzf)
 " brew install fzf ripgrep
@@ -244,7 +271,7 @@ nnoremap <Leader>9 :9b<CR>
 nnoremap <Leader>0 :10b<CR>
 
 " Supertab
-let g:SuperTabMappingForward='<s-tab>'
+" let g:SuperTabMappingForward='<s-tab>'
 let g:SuperTabMappingBackward='<tab>'
 
 " Dev Icons

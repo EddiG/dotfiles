@@ -138,11 +138,18 @@ cheatsh() {
 [ -d /usr/local/sbin ] && export PATH="/usr/local/sbin:$PATH"
 
 # Update PATH for the Istio
-[ -d ~/.local/share/istio/bin ] && export PATH="~/.local/share/istio/bin:$PATH"
+# [ -d ~/.local/share/istio/bin ] && export PATH="~/.local/share/istio/bin:$PATH"
+
+# Add rbenv shims (ruby environments manager)
+# [ -d ~/.rbenv/shims ] && export PATH="~/.rbenv/shims:$PATH"
+eval "$(rbenv init - zsh)"
 
 # Fuzzy searcher files (fzf + ripgrep)
 # brew install fzf ripgrep
-export FZF_DEFAULT_COMMAND='rg --files --follow --hidden'
+# export FZF_DEFAULT_COMMAND='rg --files --follow --hidden'
+# brew install fzf fd
+export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git --exclude node_modules'
+alias fzfp="fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'"
 
 # Configure nvm (Node.js version manager)
 export NVM_DIR="$HOME/.nvm"
@@ -154,8 +161,9 @@ export NVM_DIR="$HOME/.nvm"
 
 # Configure nnn
 export NNN_OPTS="do" 
-export NNN_PLUG="c:fzcd;p:preview-tui-ext-modified"
+export NNN_PLUG="c:fzcd;"
 export NNN_FIFO="/tmp/nnn.fifo"
+
 n ()
 {
     # Block nesting of nnn in subshells
@@ -168,18 +176,19 @@ n ()
     # To cd on quit only on ^G, remove the "export" as in:
     #     NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
     # NOTE: NNN_TMPFILE is fixed, should not be modified
-    export NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
+    # export NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
 
-    # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
-    # stty start undef
-    # stty stop undef
-    # stty lwrap undef
-    # stty lnext undef
+    # This will create a fifo where all nnn selections will be written to
+    NNN_FIFO="$(mktemp)"
+    rm "$NNN_FIFO"
+    export NNN_FIFO
+    (umask 077; mkfifo "$NNN_FIFO")
 
-    nnn "$@"
+    # Preview command
+    preview_cmd="~/nnn_preview_cmd.sh"
 
-    if [ -f "$NNN_TMPFILE" ]; then
-            . "$NNN_TMPFILE"
-            rm -f "$NNN_TMPFILE" > /dev/null
-    fi
+    tmux new "nnn" ";" set-option -g status off ";" split -l 60% -e "NNN_FIFO=$NNN_FIFO" -dh "$preview_cmd"
+
+    rm -f "$NNN_FIFO"
 }
+

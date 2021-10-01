@@ -1,8 +1,9 @@
-# Install brew first 
+# Install brew first
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 # Install dependencies
 brew install \
+  bat \
   bash-completion \
   coreutils \
   dnsmasq \
@@ -14,20 +15,17 @@ brew install \
   git \
   gnupg \
   grep \
-  heroku/brew/heroku \
   htop \
   jq \
-  kubectx \
-  kubernetes-helm \
   libmaxminddb \
   libsmi \
   libssh \
   lsusb \
   lua@5.1 \
-  midnight-commander \
   neofetch \
   neovim \
   nghttp2 \
+  nnn \
   nmap \
   nvm \
   p7zip \
@@ -37,6 +35,7 @@ brew install \
   screenfetch \
   telnet \
   tmux \
+  tree \
   watch \
   watchman \
   wget \
@@ -45,14 +44,14 @@ brew install \
 
 # Install python packages
 pip3 install \
-  black \      
-  flake8 \    
-  ipython \  
+  black \
+  flake8 \
+  ipython \
   matplotlib \
-  neovim \     
-  pandas \     
-  pip \        
-  pipupgrade \ 
-  pyvim \      
-  sklearn \    
-  tensorflow  
+  neovim \
+  pandas \
+  pip \
+  pipupgrade \
+  pyvim \
+  sklearn \
+  tensorflow

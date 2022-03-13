@@ -20,7 +20,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 " It's a nice tool...but I don't use it much
-" Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 
 " Syntax highlighter for almost all languages
 Plug 'sheerun/vim-polyglot'
@@ -107,6 +107,9 @@ set nrformats=
 " Allow per-project configuration
 set exrc
 set secure
+
+" Disable folding (use zi to toggle)
+" set nofoldenable
 
 " Map <Esc> to exit terminal-mode:
 tnoremap <Esc> <C-\><C-n>

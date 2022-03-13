@@ -137,6 +137,9 @@ cheatsh() {
 # Add brew's sbin
 [ -d /usr/local/sbin ] && export PATH="/usr/local/sbin:$PATH"
 
+# OpenJDK for Java development
+export PATH="/usr/local/opt/openjdk@11/bin:$PATH"
+
 # Update PATH for the Istio
 # [ -d ~/.local/share/istio/bin ] && export PATH="~/.local/share/istio/bin:$PATH"
 

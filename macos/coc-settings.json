@@ -1,9 +1,0 @@
-{
-  "diagnostic.displayByAle": true,
-  "tsserver.enable": true,
-  "tsserver.enableJavascript": true,
-  "typescript.suggest.enabled": true,
-  "typescript.validate.enable": true,
-  "javascript.suggest.enabled": true,
-  "javascript.validate.enable": false
-}

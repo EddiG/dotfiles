@@ -1,25 +1,27 @@
-set nocompatible
-
 call plug#begin('~/.vim/plugged')
-
 " Theme
 Plug 'morhetz/gruvbox'
 
 " Explore
-Plug '/usr/local/opt/fzf'
-Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'jlanzarotta/bufexplorer'
-Plug 'mcchrish/nnn.vim'
-Plug 'vim-airline/vim-airline'
+" Plug '/usr/local/opt/fzf'
+" Plug 'junegunn/fzf.vim'
+" Plug 'scrooloose/nerdtree'
+" Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'jlanzarotta/bufexplorer'
+" Plug 'mcchrish/nnn.vim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'kyazdani42/nvim-tree.lua'
+Plug 'hoob3rt/lualine.nvim'
+" Plug 'akinsho/nvim-bufferline.lua'
+Plug 'lewis6991/gitsigns.nvim'
 
 " Editor
-Plug 'jiangmiao/auto-pairs'
+Plug 'windwp/nvim-autopairs'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-" It's a nice tool...but I don't use it much
 Plug 'tpope/vim-fugitive'
 
 " Syntax highlighter for almost all languages
@@ -27,12 +29,23 @@ Plug 'sheerun/vim-polyglot'
 
 " Intellisense autocompletion
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'ervandew/supertab'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi'
+" Plug 'ervandew/supertab'
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'zchee/deoplete-jedi'
 
-" Checker
-Plug 'w0rp/ale'
+" Completion
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+
+" Language Server Protocol
+Plug 'neovim/nvim-lspconfig'
+Plug 'folke/trouble.nvim'
+
+" Formatter
+Plug 'mhartington/formatter.nvim'
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -46,12 +59,8 @@ Plug 'mhinz/vim-hugefile'
 " Plug 'dbeniamine/cheat.sh-vim'
 
 " Dev Icons
-Plug 'ryanoasis/vim-devicons'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-
+Plug 'kyazdani42/nvim-web-devicons'
 call plug#end()
-
-syntax on
 
 " Set the leader key
 let mapleader = ","
@@ -64,25 +73,18 @@ colorscheme gruvbox
 
 " Allow switching from not saved buffer
 set hidden
-
 " Ask confirmation if there is not saved buffer and I'm trying to quit from vim
 set confirm
-
 " Don't redraw while executing macros (good performance config)
 set lazyredraw
-
 " Ignore letter case in search pattern
 set ignorecase
-
 " Honor letter case if the pattern contains uppercase letters
 set smartcase
-
 " Show suggestions in the command pallete
 set wildmenu
-
 " Highlighting the search result
 set hlsearch
-
 " Show line number
 set number
 
@@ -108,14 +110,8 @@ set nrformats=
 set exrc
 set secure
 
-" Disable folding (use zi to toggle)
-" set nofoldenable
-
 " Map <Esc> to exit terminal-mode:
 tnoremap <Esc> <C-\><C-n>
-
-" Paste with placing the replaced content in 'the black hole register'
-vnoremap p "_dP
 
 " Insert real tab
 inoremap <S-Tab> <C-V><Tab>
@@ -128,138 +124,353 @@ if has('persistent_undo')
   set undofile
 endif
 
-" " ================ Intellisense engine ===================
-" " Use `[g` and `]g` to navigate diagnostics
-" nmap <silent> [g <Plug>(coc-diagnostic-prev)
-" nmap <silent> ]g <Plug>(coc-diagnostic-next)
+" ============== Language Server Protocol  ===============
+lua << EOF
+local lspconfig = require "lspconfig"
 
-" " Remap keys for gotos
-" nmap <silent> <leader>d <Plug>(coc-definition)
-" nmap <silent> <leader>y <Plug>(coc-type-definition)
-" nmap <silent> <leader>i <Plug>(coc-implementation)
-" nmap <silent> <leader>r <Plug>(coc-references)
+local on_attach = function(client, bufnr)
+  -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  client.resolved_capabilities.document_formatting = false
+end
 
-" " Remap for rename current word
-" nmap <leader>rn <Plug>(coc-rename)
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-" " Remap for do codeAction of current line
-" nmap <leader>ac  <Plug>(coc-codeaction)
+-- yarn global add typescript typescript-language-server
+local servers = { 'tsserver' }
+for _, lsp in pairs(servers) do
+  lspconfig[lsp].setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    flags = {
+      -- This will be the default in neovim 0.7+
+      debounce_text_changes = 150,
+    }
+  }
+end
 
-" " Use K to show documentation in preview window
-" nnoremap <silent> K :call <SID>show_documentation()<CR>
+-- yarn global add diagnostic-languageserver eslint_d
+lspconfig['diagnosticls'].setup {
+  filetypes = {"javascript", "javascriptreact", "typescript", "typescriptreact"},
+  init_options = {
+    filetypes = {
+      javascript = "eslint",
+      typescript = "eslint",
+      javascriptreact = "eslint",
+      typescriptreact = "eslint"
+    },
+    linters = {
+      eslint = {
+        sourceName = "eslint",
+        command = "eslint_d",
+        rootPatterns = {
+          ".eslintrc.js",
+          "package.json"
+        },
+        debounce = 100,
+        args = {
+          "--cache",
+          "--stdin",
+          "--stdin-filename",
+          "%filepath",
+          "--format",
+          "json"
+        },
+        parseJson = {
+          errorsRoot = "[0].messages",
+          line = "line",
+          column = "column",
+          endLine = "endLine",
+          endColumn = "endColumn",
+          message = "${message} [${ruleId}]",
+          security = "severity"
+        },
+        securities = {
+          [2] = "error",
+          [1] = "warning"
+        }
+      }
+    }
+  }
+}
+EOF
+nnoremap <silent>gd    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent>gh    <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent>gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+" nnoremap <silent>gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent>gR    <cmd>lua vim.lsp.buf.rename()<CR>
+nnoremap <silent>gca <cmd>:Telescope lsp_code_actions<CR>
+nnoremap <silent><C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+" nnoremap <silent><leader>fo <cmd>lua vim.lsp.buf.formatting()<CR>
 
-" function! s:show_documentation()
-"   if (index(['vim','help'], &filetype) >= 0)
-"     execute 'h '.expand('<cword>')
-"   else
-"     call CocAction('doHover')
-"   endif
-" endfunction
+lua << EOF
+require("trouble").setup {
+  icons = true,
+  mode = "document_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
+  fold_open = "",
+  fold_closed = "",
+  signs = {
+      error = "",
+      warning = "",
+      hint = "",
+      information = "",
+  },
+  --use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
+}
 
-" " Use tab for trigger completion with characters ahead and navigate.
-" " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+local signs = { Error = "", Warn = "", Hint = "", Info = "" }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+end
+EOF
+nnoremap <leader>xx <cmd>TroubleToggle<cr>
+nnoremap <leader>xw <cmd>TroubleToggle workspace_diagnostics<cr>
+nnoremap <leader>xd <cmd>TroubleToggle document_diagnostics<cr>
+nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
+nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
+nnoremap gr <cmd>TroubleToggle lsp_references<cr>
 
-" function! s:check_back_space() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
-
-" " Use <c-space> to trigger completion.
-" inoremap <silent><expr> <c-space> coc#refresh()
-" " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" " Coc only does snippet and additional edit on confirm.
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" " ========================================================
-
-" ================ Linting & Formatting ==================
-" ALE (Asynchronus Lint Engine)
-" Use these configuration options per project
-"
-" let g:ale_linters = {}
-" let g:ale_linters['javascript'] = ['eslint']
-" let g:ale_javascript_eslint_use_global = 0
-" let g:ale_javascript_eslint_suppress_missing_config = 1
-" let g:ale_javascript_eslint_suppress_eslintignore = 1
-
-let g:ale_fixers = {}
-let g:ale_fixers['javascript'] = ['prettier']
-let g:ale_fixers['javascriptreact'] = ['prettier']
-let g:ale_fixers['graphql'] = ['prettier']
-let g:ale_fixers['json'] = ['prettier']
-let g:ale_fixers['css'] = ['prettier']
-let g:ale_fixers['html'] = ['prettier']
-
-" pip3 install black flake8
-let g:ale_linters = {}
-let g:ale_linters['python'] = ['flake8']
-let g:ale_fixers['python'] = ['black']
-
-" install xmllint first
-let g:ale_fixers['xml'] = ['xmllint']
-
-" install shfmt first
-let g:ale_fixers['sh'] = ['shfmt']
-autocmd FileType sh let g:ale_fix_on_save = 1
-
-" nnoremap <silent> <Leader>d :ALEGoToDefinition<CR>
-" nnoremap <silent> <Leader>r :ALEFindReferences<CR>
+" Git signs
+lua << EOF
+require('gitsigns').setup({
+  current_line_blame = true,
+  signcolumn = false,
+  numhl = true,
+  linehl = false
+})
+EOF
 " ========================================================
 
-" Deoplete (autocomplete)
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_ignore_case = 1
+" ==================== Formatting ========================
+lua << EOF
+local prettier = function() 
+  return {
+    exe = "prettier",
+    args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0)},
+    stdin = true
+  }
+end
 
-" NERDTree
-nmap <C-\> :NERDTreeFind<CR>
-nmap <silent> <leader><leader> :NERDTreeToggle<CR>
-let g:NERDTreeDirArrowExpandable = "\u00a0"
-let g:NERDTreeDirArrowCollapsible = "\u00a0"
+require('formatter').setup(
+  {
+      logging = false,
+      filetype = {
+        typescript = { prettier },
+        typescriptreact = { prettier },
+        javascript = { prettier },
+        javascriptreact = { prettier },
+        json = { prettier },
+        html = { prettier },
+        css = { prettier },
+        xml = { prettier },
+     }
+  }
+)
+EOF
+nnoremap <silent> <leader>f :Format<CR>
+augroup AutoFormat
+  autocmd!
+  autocmd BufWritePost *.js,*.jsx,*.ts,*.tsx,*.css,*.scss,*.html,*.json FormatWrite
+augroup END
+" ========================================================
 
-" NNN
-" Disable default mappings
-let g:nnn#command = 'nnn -do'
-" To open nnn when vim load a directory
-let g:nnn#replace_netrw = 1
-" To overrite default mappings
-let g:nnn#set_default_mappings = 0
-" Start nnn in the current file's directory
-nnoremap <silent> <leader>n :NnnPicker %:p:h<CR>
-" Layout setup
-" Opens the n³ window in a split
-" let g:nnn#layout = 'new' " or vnew, tabnew etc.
-" Or pass a dictionary with window size
-" let g:nnn#layout = { 'left': '~20%' } " or right, up, down
-" Floating window (neovim latest and vim with patch 8.2.191)
-let g:nnn#layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Debug' } }
-let g:nnn#action = { '<c-o>': 'edit', '<c-s>': 'vsplit' }
+" ====================== Completion ======================
+lua <<EOF
+local cmp = require('cmp')
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+    end,
+  },
+  sources = {
+    { name = 'ultisnips' },
+    { name = 'buffer', max_item_count = 10 },
+    { name = 'nvim_lsp', max_item_count = 10 },
+  },
+  matching = {
+    disallow_fuzzy_matching = false,
+    disallow_partial_matching = false,
+    disallow_prefix_unmatching = false,
+  },
+  sorting = {
+    priority_weight = 2,
+    comparators = {
+      cmp.config.compare.offset,
+      cmp.config.compare.exact,
+      cmp.config.compare.score,
+      cmp.config.compare.recently_used,
+      cmp.config.compare.kind,
+      cmp.config.compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
+    }
+  },
+  mapping = {
+    ['<C-j>'] = cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }), { 'i', 'c' }),
+    ['<C-k>'] = cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }), { 'i', 'c' }),
+    ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+    ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+    ['<C-y>'] = cmp.config.disable,
+    ['<C-e>'] = cmp.config.disable,
+    ['<S-Tab>'] = cmp.config.disable,
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        local entry = cmp.get_selected_entry()
+        if not entry then
+          cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          cmp.confirm({ select = true })
+        end
+      else
+        -- fallback()
+      end
+    end, {"i","s","c",}),
+  },
+  experimental = {
+    ghost_text = true
+  }
+})
 
-" Fuzzy searcher (fzf)
-" brew install fzf ripgrep
-nmap <C-p> :Files<CR>
-nmap <C-f> :Rg<CR>
+-- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline('/', {
+  sources = {
+    { name = 'buffer' }
+  }
+})
 
-" Airline
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline_powerline_fonts = 1
-set laststatus=2
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
+
+-- autopairs setup
+require('nvim-autopairs').setup()
+local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({  map_char = { tex = '' } }))
+EOF
+" ========================================================
+
+" ====================== Navigation ======================
+lua << EOF
+require('telescope').setup {
+  defaults = {
+    mappings = {
+      i = {
+        -- map actions.which_key to <C-h> (default: <C-/>)
+        -- actions.which_key shows the mappings for your picker,
+        -- e.g. git_{create, delete, ...}_branch for the git_branches picker
+        ["<C-h>"] = "which_key",
+        ["<C-j>"] = "move_selection_next",
+        ["<C-k>"] = "move_selection_previous",
+        ["<C-o>"] = "select_default"
+      }
+    }
+  },
+  extensions = {
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                       -- the default case_mode is "smart_case"
+    }
+  }
+}
+require('telescope').load_extension('fzf')
+EOF
+nnoremap <C-p> <cmd>Telescope find_files<cr>
+nnoremap <C-f> <cmd>Telescope live_grep<cr>
+nnoremap <C-b> <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+" Lualine
+lua << END
+require('lualine').setup {
+  options = {
+    theme = 'auto',
+    disabled_types = { 'NvimTree' }
+  }
+}
+END
+
+" NvimTree
+lua << END
+require'nvim-tree'.setup {
+  --auto_close = true,
+  auto_reload_on_write = true,
+  filters = {
+    dotfiles = true,
+    custom = {},
+    exclude = {},
+  },
+}
+END
+set termguicolors
+highlight NvimTreeFolderName guifg=#acb21f
+let g:nvim_tree_indent_markers = 1
+let g:nvim_tree_git_hl = 1
+nnoremap <leader><leader> :NvimTreeToggle<CR>
+nnoremap <C-\> :NvimTreeFindFile<CR>
+
+" Bufferline
+" lua << EOF
+" require("bufferline").setup {
+"   highlights = {
+"     fill = {
+"       guibg = "#282828"
+"     },
+"     separator_selected = {
+"       guifg = "#acb21f"
+"     },
+"     separator_visible = {
+"       guifg = "#acb21f"
+"     },
+"     separator = {
+"       guifg = "#acb21f"
+"     }
+"   },
+"   options = {
+"     modified_icon = "●",
+"     left_trunc_marker = "",
+"     right_trunc_marker = "",
+"     max_name_length = 25,
+"     max_prefix_length = 25,
+"     enforce_regular_tabs = false,
+"     show_buffer_close_icons = false,
+"     show_close_icon = false,
+"     separator_style = "thin",
+"     diagnostics = "nvim_lsp",
+"     diagnostics_update_in_insert = false,
+"     diagnostics_indicator = function(count, level, diagnostics_dict, context) return "("..count..")" end,
+"     offsets = {
+"       {
+"         filetype = "NvimTree",
+"         text = "File Explorer",
+"         highlight = "Directory",
+"         text_align = "center"
+"       }
+"     }
+"   }
+" }
+" EOF
+" " set mouse=n
+" nnoremap <silent> gb :BufferLinePick<CR>
 
 " Bufexplorer
-let g:bufExplorerDisableDefaultKeyMapping = 1
-let g:bufExplorerDetailedHelp = 1
-let g:bufExplorerShowRelativePath = 1
-let g:bufExplorerShowTabBuffer = 1
-let g:bufExplorerSortBy = 'fullpath'
-let g:bufExplorerSplitBelow = 1
-let g:bufExplorerSplitRight = 1
-let g:bufExplorerSplitOutPathName = 0
-nnoremap <leader>b :BufExplorer<CR>
+" let g:bufExplorerDisableDefaultKeyMapping = 1
+" let g:bufExplorerDetailedHelp = 1
+" let g:bufExplorerShowRelativePath = 1
+" let g:bufExplorerShowTabBuffer = 1
+" let g:bufExplorerSortBy = 'fullpath'
+" let g:bufExplorerSplitBelow = 1
+" let g:bufExplorerSplitRight = 1
+" let g:bufExplorerSplitOutPathName = 0
+" nnoremap <leader>b :BufExplorer<CR>
 nnoremap <Leader>l :ls<CR>
 nnoremap <Leader>g :e#<CR>
 nnoremap <Leader>1 :1b<CR>
@@ -273,12 +484,8 @@ nnoremap <Leader>8 :8b<CR>
 nnoremap <Leader>9 :9b<CR>
 nnoremap <Leader>0 :10b<CR>
 
-" Supertab
-" let g:SuperTabMappingForward='<s-tab>'
-let g:SuperTabMappingBackward='<tab>'
-
-" Dev Icons
-let g:DevIconsEnableFoldersOpenClose = 1
+" Trigger configuration (Optional)
+" let g:UltiSnipsExpandTrigger="<C-l>"
 
 " Fold/Unfold trigger
 nmap <silent> <leader>f za
@@ -296,10 +503,10 @@ nmap <silent> = <C-w>+
 nmap <silent> <C-m> <C-w>>
 
 " Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+" autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+" autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+" autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+" autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 " Enable fold for JSON
 " autocmd FileType json set foldmethod=syntax 
@@ -309,5 +516,3 @@ autocmd BufRead,BufNewFile .babelrc,.eslintrc,.prettierrc,*.geojson set filetype
 autocmd BufRead,BufNewFile *.prisma set filetype=graphql
 autocmd BufRead,BufNewFile *.toml set filetype=yaml
 
-" Trigger configuration (Optional)
-let g:UltiSnipsExpandTrigger="<C-l>"

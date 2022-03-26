@@ -414,6 +414,7 @@ set termguicolors
 highlight NvimTreeFolderName guifg=#acb21f
 let g:nvim_tree_indent_markers = 1
 let g:nvim_tree_git_hl = 1
+let g:nvim_tree_special_files = {}
 nnoremap <leader><leader> :NvimTreeToggle<CR>
 nnoremap <C-\> :NvimTreeFindFile<CR>
 

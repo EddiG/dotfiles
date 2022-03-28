@@ -15,7 +15,6 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'hoob3rt/lualine.nvim'
 " Plug 'akinsho/nvim-bufferline.lua'
-Plug 'lewis6991/gitsigns.nvim'
 
 " Editor
 Plug 'windwp/nvim-autopairs'
@@ -23,6 +22,8 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
+Plug 'lewis6991/gitsigns.nvim'
+Plug 'norcalli/nvim-colorizer.lua'
 
 " Syntax highlighter for almost all languages
 Plug 'sheerun/vim-polyglot'
@@ -484,6 +485,11 @@ nnoremap <Leader>7 :7b<CR>
 nnoremap <Leader>8 :8b<CR>
 nnoremap <Leader>9 :9b<CR>
 nnoremap <Leader>0 :10b<CR>
+
+" Colorizer
+lua <<EOF
+require('colorizer').setup()
+EOF
 
 " Trigger configuration (Optional)
 " let g:UltiSnipsExpandTrigger="<C-l>"

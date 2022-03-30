@@ -3,18 +3,13 @@ call plug#begin('~/.vim/plugged')
 Plug 'morhetz/gruvbox'
 
 " Explore
-" Plug '/usr/local/opt/fzf'
-" Plug 'junegunn/fzf.vim'
-" Plug 'scrooloose/nerdtree'
-" Plug 'Xuyuanp/nerdtree-git-plugin'
-" Plug 'jlanzarotta/bufexplorer'
 " Plug 'mcchrish/nnn.vim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'hoob3rt/lualine.nvim'
-" Plug 'akinsho/nvim-bufferline.lua'
+" Plug 'christoomey/vim-tmux-navigator'
 
 " Editor
 Plug 'windwp/nvim-autopairs'
@@ -27,12 +22,6 @@ Plug 'norcalli/nvim-colorizer.lua'
 
 " Syntax highlighter for almost all languages
 Plug 'sheerun/vim-polyglot'
-
-" Intellisense autocompletion
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'ervandew/supertab'
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" Plug 'zchee/deoplete-jedi'
 
 " Completion
 Plug 'hrsh7th/nvim-cmp'
@@ -71,6 +60,7 @@ noremap \ ,
 let g:gruvbox_italic = 1
 set background=dark
 colorscheme gruvbox
+highlight Comment cterm=italic gui=italic
 
 " Allow switching from not saved buffer
 set hidden
@@ -419,60 +409,7 @@ let g:nvim_tree_special_files = {}
 nnoremap <leader><leader> :NvimTreeToggle<CR>
 nnoremap <C-\> :NvimTreeFindFile<CR>
 
-" Bufferline
-" lua << EOF
-" require("bufferline").setup {
-"   highlights = {
-"     fill = {
-"       guibg = "#282828"
-"     },
-"     separator_selected = {
-"       guifg = "#acb21f"
-"     },
-"     separator_visible = {
-"       guifg = "#acb21f"
-"     },
-"     separator = {
-"       guifg = "#acb21f"
-"     }
-"   },
-"   options = {
-"     modified_icon = "●",
-"     left_trunc_marker = "",
-"     right_trunc_marker = "",
-"     max_name_length = 25,
-"     max_prefix_length = 25,
-"     enforce_regular_tabs = false,
-"     show_buffer_close_icons = false,
-"     show_close_icon = false,
-"     separator_style = "thin",
-"     diagnostics = "nvim_lsp",
-"     diagnostics_update_in_insert = false,
-"     diagnostics_indicator = function(count, level, diagnostics_dict, context) return "("..count..")" end,
-"     offsets = {
-"       {
-"         filetype = "NvimTree",
-"         text = "File Explorer",
-"         highlight = "Directory",
-"         text_align = "center"
-"       }
-"     }
-"   }
-" }
-" EOF
-" " set mouse=n
-" nnoremap <silent> gb :BufferLinePick<CR>
-
-" Bufexplorer
-" let g:bufExplorerDisableDefaultKeyMapping = 1
-" let g:bufExplorerDetailedHelp = 1
-" let g:bufExplorerShowRelativePath = 1
-" let g:bufExplorerShowTabBuffer = 1
-" let g:bufExplorerSortBy = 'fullpath'
-" let g:bufExplorerSplitBelow = 1
-" let g:bufExplorerSplitRight = 1
-" let g:bufExplorerSplitOutPathName = 0
-" nnoremap <leader>b :BufExplorer<CR>
+" Buffer
 nnoremap <Leader>l :ls<CR>
 nnoremap <Leader>g :e#<CR>
 nnoremap <Leader>1 :1b<CR>
@@ -508,6 +445,14 @@ nmap <silent> <C-n> <C-w><
 nmap <silent> - <C-w>-
 nmap <silent> = <C-w>+
 nmap <silent> <C-m> <C-w>>
+
+" vim + tmux navigation
+" let g:tmux_navigator_no_mappings = 1
+" nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
+" nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
+" nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
+" nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
+" nnoremap <silent> <c-\> :TmuxNavigatePrevious<cr>
 
 " Enable omni completion.
 " autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS

@@ -20,6 +20,6 @@
 [pull]
 	rebase = true
 [diff]
-	tool = nvimdiff3
+	tool = nvimdiff
 [init]
 	defaultBranch = master

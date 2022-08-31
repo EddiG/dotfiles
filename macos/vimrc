@@ -184,14 +184,14 @@ lspconfig['diagnosticls'].setup {
   }
 }
 EOF
-nnoremap <silent>gd    <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent>gh    <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent>gD    <cmd>lua vim.lsp.buf.implementation()<CR>
-" nnoremap <silent>gr    <cmd>lua vim.lsp.buf.references()<CR>
-nnoremap <silent>gR    <cmd>lua vim.lsp.buf.rename()<CR>
-nnoremap <silent>gca <cmd>:Telescope lsp_code_actions<CR>
-nnoremap <silent><C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
-" nnoremap <silent><leader>fo <cmd>lua vim.lsp.buf.formatting()<CR>
+nnoremap <silent>gd <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent>gD <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent>gi <cmd>lua vim.lsp.buf.implementation()<CR>
+" the Trouble's view is using instead
+" nnoremap <silent>gr <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent>rn <cmd>lua vim.lsp.buf.rename()<CR>
+nnoremap <silent>ca <cmd>lua vim.lsp.buf.code_action()<CR>
+nnoremap <silent>K <cmd>lua vim.lsp.buf.hover()<CR>
 
 lua << EOF
 require("trouble").setup {
@@ -219,7 +219,7 @@ nnoremap <leader>xw <cmd>TroubleToggle workspace_diagnostics<cr>
 nnoremap <leader>xd <cmd>TroubleToggle document_diagnostics<cr>
 nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
 nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
-nnoremap gr <cmd>TroubleToggle lsp_references<cr>
+nnoremap <silent>gr <cmd>TroubleToggle lsp_references<cr>
 
 " Git signs
 lua << EOF
@@ -254,6 +254,7 @@ require('formatter').setup(
         html = { prettier },
         css = { prettier },
         xml = { prettier },
+        svg = { prettier },
      }
   }
 )

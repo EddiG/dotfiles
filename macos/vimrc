@@ -242,6 +242,12 @@ local prettier = function()
   }
 end
 
+local rustfmt = function() 
+  return {
+    exe = "rustfmt"
+  }
+end
+
 require('formatter').setup(
   {
       logging = false,
@@ -256,6 +262,7 @@ require('formatter').setup(
         scss = { prettier },
         xml = { prettier },
         svg = { prettier },
+        rust = { rustfmt }
      }
   }
 )
@@ -263,7 +270,7 @@ EOF
 nnoremap <silent> <leader>f :Format<CR>
 augroup AutoFormat
   autocmd!
-  autocmd BufWritePost *.js,*.jsx,*.ts,*.tsx,*.css,*.scss,*.html,*.json FormatWrite
+  autocmd BufWritePost *.js,*.jsx,*.ts,*.tsx,*.css,*.scss,*.html,*.json,*.rs FormatWrite
 augroup END
 " ========================================================
 

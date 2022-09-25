@@ -149,6 +149,9 @@ export PATH="/usr/local/opt/openjdk@11/bin:$PATH"
 # [ -d ~/.rbenv/shims ] && export PATH="~/.rbenv/shims:$PATH"
 eval "$(rbenv init - zsh)"
 
+# Add Rust's tools to the PATH
+. "$HOME/.cargo/env"
+
 # Fuzzy searcher files (fzf + ripgrep)
 # brew install fzf ripgrep
 # export FZF_DEFAULT_COMMAND='rg --files --follow --hidden'

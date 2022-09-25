@@ -253,6 +253,7 @@ require('formatter').setup(
         json = { prettier },
         html = { prettier },
         css = { prettier },
+        scss = { prettier },
         xml = { prettier },
         svg = { prettier },
      }

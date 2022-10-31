@@ -121,10 +121,10 @@ local lspconfig = require "lspconfig"
 
 local on_attach = function(client, bufnr)
   -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-  client.resolved_capabilities.document_formatting = false
+  client.server_capabilities.document_formatting = false
 end
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 -- yarn global add typescript typescript-language-server
 lspconfig['tsserver'].setup {
@@ -138,6 +138,7 @@ lspconfig['tsserver'].setup {
 
 -- brew install rust-analyzer
 lspconfig["rust_analyzer"].setup({
+    capabilities = capabilities,
     on_attach=on_attach,
     settings = {
         ["rust-analyzer"] = {

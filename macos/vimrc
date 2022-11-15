@@ -234,6 +234,16 @@ for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
+
+function ToggleTroubleAuto()
+  local ok, trouble = pcall(require, "trouble")
+  if ok then
+    vim.defer_fn(function() 
+      vim.cmd('cclose')
+      trouble.open('quickfix') 
+    end, 0)
+  end
+end
 EOF
 nnoremap <leader>xx <cmd>TroubleToggle<cr>
 nnoremap <leader>xw <cmd>TroubleToggle workspace_diagnostics<cr>
@@ -241,6 +251,7 @@ nnoremap <leader>xd <cmd>TroubleToggle document_diagnostics<cr>
 nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
 nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
 nnoremap <silent>gr <cmd>TroubleToggle lsp_references<cr>
+autocmd BufWinEnter quickfix silent :lua ToggleTroubleAuto()
 
 " Git signs
 lua << EOF
@@ -307,7 +318,7 @@ cmp.setup({
   sources = {
     { name = 'ultisnips' },
     { name = 'buffer', max_item_count = 10 },
-    { name = 'nvim_lsp', max_item_count = 10 },
+    { name = 'nvim_lsp' },
   },
   matching = {
     disallow_fuzzy_matching = false,
@@ -388,7 +399,7 @@ require('telescope').setup {
         ["<C-h>"] = "which_key",
         ["<C-j>"] = "move_selection_next",
         ["<C-k>"] = "move_selection_previous",
-        ["<C-o>"] = "select_default"
+        ["<C-o>"] = "select_default",
       }
     }
   },

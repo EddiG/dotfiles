@@ -175,8 +175,8 @@ lspconfig['diagnosticls'].setup {
         sourceName = "eslint",
         command = "eslint_d",
         rootPatterns = {
+          ".eslintrc",
           ".eslintrc.js",
-          "package.json"
         },
         debounce = 100,
         args = {
@@ -197,8 +197,8 @@ lspconfig['diagnosticls'].setup {
           security = "severity"
         },
         securities = {
+          [1] = "warning",
           [2] = "error",
-          [1] = "warning"
         }
       }
     }

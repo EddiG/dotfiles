@@ -94,6 +94,11 @@ eval "$(rbenv init - zsh)"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# Add the SSH identity files to the ssh-agent
+# ssh-add --apple-load-keychain
+# Run that command only once at the system startup time by adding a launch agent
+# https://unix.stackexchange.com/a/560404
+
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 

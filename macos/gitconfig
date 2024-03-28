@@ -1,11 +1,11 @@
 [user]
-	name = Eduard Gilmutdinov
-	email = edgilmutdinov@gmail.com
-	username = eddig
+  name = Eduard Gilmutdinov
+  email = edgilmutdinov@gmail.com
+  username = eddig
 [core]
   pager = delta
-	editor = nvim
-	autocrlf = input
+  editor = nvim
+  autocrlf = input
 [interactive]
   diffFilter = delta --color-only --features=interactive
 [delta]
@@ -48,17 +48,20 @@
   lll = log --graph --oneline --decorate --all
   llll = log --date=short --pretty=format:\"%C(yellow)%h %C(cyan)%cd %C(cyan)(%cr)%Creset %s\"
 [credential]
-	helper = osxkeychain
+  helper = osxkeychain
 [rerere]
-	enabled = 1
+  enabled = false
 [merge]
-	conflictstyle = diff3
+  tool = nvimdiff
+  conflictstyle = zdiff3
+  keepbackup = false
 [push]
-	default = simple
+  default = current
 [pull]
-	rebase = true
+  rebase = true
 [diff]
-	tool = nvimdiff
+  tool = nvimdiff
   colorMoved = default
+  algorithm = histogram
 [init]
-	defaultBranch = main
+  defaultBranch = main
